@@ -27,7 +27,7 @@ export const getUserByIdService = async(id : number) => {
 
 };
 
-export const createUserService = async (createUserDto : ICreateUserDto) => {
+export const createUserService = async (createUserDto : ICreateUserDto):Promise<User> => {
   const { name, email, birthdate, nDni, username, password } = createUserDto;
 
   const foundUser:User | null = await userRepository.findOneBy({email});

@@ -28,4 +28,4 @@ export const validateCredentialService = async (validateCredentialDto : Icreatec
         throw new Error("wrong password");
     }
     return credential.id;
-}
+};

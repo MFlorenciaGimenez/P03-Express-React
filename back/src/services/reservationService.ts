@@ -28,7 +28,10 @@ export const createReservationService = async({date, time, userId}: Ireservation
         throw new Error(`user with id: ${userId} does not exist`);
     }
     const newReservation : Reservation = await reservationRepository.create({
-        date, time, user
+        date,
+        time,
+        status: ReservationStatus.ACTIVE, 
+        user: { id: user.id } as User
     });
     
     const savedReservation : Reservation = await reservationRepository.save(newReservation);

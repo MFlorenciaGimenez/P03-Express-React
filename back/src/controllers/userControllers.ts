@@ -10,7 +10,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
     const allusers = await getAllUsersService();
     res.status(200).json(allusers);
   } catch (error) {
-    res.status(500).json({
+    res.status(404).json({
       message: "couldn't get the users"
     });
   }
@@ -21,7 +21,7 @@ export const getUserById = async( req:Request, res:Response) =>{
         const user: User  = await getUserByIdService(Number(id));
         res.status(200).json(user);   
     } catch (error) {
-        res.status(500).json({
+        res.status(404).json({
             message:"couldn't find the user"
         })
     }
@@ -32,7 +32,7 @@ export const registerUser = async (req:Request, res:Response) => {
         const newUser: User = await createUserService({name, email, birthdate, nDni, username, password})
         res.status(201).json(newUser);    
     } catch (error) {
-        res.status(500).json({
+        res.status(400).json({
             message:"couldn't register"
         });
     }
@@ -47,7 +47,7 @@ export const loginUser = async (req:Request, res:Response) => {
 
         res.status(200).json(user);
     } catch (error) {
-        res.status(500).json({
+        res.status(400).json({
             message: "couldn't login"
         });
     }

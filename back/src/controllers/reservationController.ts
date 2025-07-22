@@ -8,8 +8,8 @@ export const getAllReservations = async (req: Request, res: Response) => {
         const reservations: Reservation[]= await getAllReservationService();
         res.status(200).json(reservations)
     } catch (error) {
-        res.status(500).json({
-            message:"could't get reservations"
+        res.status(404).json({
+            message:"could not get reservations"
         })
     }
 };
@@ -20,7 +20,7 @@ export const getReservationById = async (req: Request, res: Response) => {
         res.status(200).json(reservation)
     } catch (error) {
         res.status(404).json({
-            message:"no reservation found for specified id"
+            message:"reservation not found for specified user"
         })
     }
 };
@@ -28,10 +28,10 @@ export const createReservation = async (req: Request, res: Response) => {
     try {
         const { date, time, userId } = req.body
         const reservation = await createReservationService({date, time, userId} )
-        res.status(200).json(reservation)
+        res.status(201).json(reservation)
     } catch (error) {
-        res.status(500).json({
-            message:"cannot create a new reservsation"
+        res.status(400).json({
+            message:"cannot create a new reservation"
         })
     }
 };
@@ -42,7 +42,7 @@ export const cancelReservation = async (req: Request, res: Response) => {
         res.status(200).json(reservation);
     } catch (error) {
         res.status(404).json({
-            message:"reservation no found"
+            message:"reservation not found"
         })
     }
 };
