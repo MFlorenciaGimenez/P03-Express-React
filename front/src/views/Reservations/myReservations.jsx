@@ -8,23 +8,41 @@ const MyReservations = () => {
   const [reservations, setReservations] = useState([]);
 
   useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+
+    if (!storedUser || !storedUser.id) {
+      alert("⚠️ User not found. Please log in again.");
+      return;
+    }
+
     axios
-      .get(GETRESERVATIONS_URL)
-      .then((response) => response.data)
-      .then((reservationsfromDB) => setReservations(reservationsfromDB))
+      .get(`http://localhost:3000/users/${storedUser.id}`)
+      .then((res) => {
+        const userData = res.data;
+        setReservations(userData.reservations);
+      })
       .catch((error) => {
-        alert(error.message);
-        console.log(error);
+        console.error(error);
+        alert("❌ Could not load your reservations");
       });
   }, []);
 
-  const cancelReservation = (id) => {
-    const updatedReservations = reservations.map((appointment) =>
-      appointment.id === id
-        ? { ...appointment, status: "cancelled" }
-        : appointment
-    );
-    setReservations(updatedReservations);
+  const cancelReservation = async (id) => {
+    try {
+      await axios.put(`http://localhost:3000/appointments/cancel/${id}`);
+
+      const updated = reservations.map((appointment) =>
+        appointment.id === id
+          ? { ...appointment, status: "cancelled" }
+          : appointment
+      );
+
+      setReservations(updated);
+      alert("✅ Reservation cancelled");
+    } catch (error) {
+      console.error(error);
+      alert("❌ Could not cancel reservation");
+    }
   };
 
   return (

@@ -1,14 +1,36 @@
 import { useFormik } from "formik";
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
+import axios from "axios";
 import "../StylesForm/StylesForm.css";
 
 const Login = () => {
+  const { login } = useContext(AuthContext);
+  const navigate = useNavigate();
+
   const formik = useFormik({
     initialValues: {
       username: "",
       password: "",
     },
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+    onSubmit: async (values, { setSubmitting }) => {
+      try {
+        const response = await axios.post(
+          "http://localhost:3000/users/login",
+          values
+        );
+        login(response.data);
+        navigate("/");
+      } catch (error) {
+        if (axios.isAxiosError(error) && error.response) {
+          setErrors({ password: "Invalid username or password" });
+        } else {
+          console.error("Login error:", error);
+        }
+      } finally {
+        setSubmitting(false);
+      }
     },
   });
 
