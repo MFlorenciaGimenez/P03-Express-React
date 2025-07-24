@@ -20,7 +20,7 @@ const Home = () => {
       <header className="header">
         <h1 className="restaurant-title">Sakura</h1>
         <h2 className="restaurant-subtitle">
-          A little piece of Asia in New York🌸
+          A little piece of Asia in Buenos Aires🌸
         </h2>
       </header>
       <section className="about-cards">
@@ -43,7 +43,11 @@ const Home = () => {
 
       <section className="cta">
         <h2>Are you ready to live the experience?</h2>
-        <p>Book your table and experience the magic of Asia with us.</p>
+        <p>
+          Book your table and experience the magic of Asia with us.
+          <br />
+          Our opening hours are Monday to Friday, from 8 a.m. to 8 p.m.
+        </p>
         <button onClick={handleReserveClick} className="cta-button">
           Reserve a table
         </button>

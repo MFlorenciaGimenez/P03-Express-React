@@ -1,7 +1,7 @@
 interface IreservationDto {
-    date: string,
-    time: string,
-    userId:number           //!!!quitar luego
+  date: string;
+  time: string;
+  userId: number;
 }
 
 export default IreservationDto;

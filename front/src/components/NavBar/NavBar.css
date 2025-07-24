@@ -36,3 +36,17 @@
 .navbar-links a:hover {
   color: #e88fb1;
 }
+.logout-button {
+  background-color: #d6336c;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: #b82e5b;
+}

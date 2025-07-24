@@ -6,23 +6,18 @@ export const validateCreateUser = (
   res: Response,
   next: NextFunction
 ): void => {
-  console.log("REQ BODY en validador:", req.body);
-
   const { name, email, birthdate, nDni, username, password } = req.body;
 
   if (!name || typeof name !== "string") {
-    console.log("❌ ERROR en name:", name);
     res.status(400).json({ error: "Name is required and must be a string" });
     return;
   }
   if (name.length < 3 || name.length > 50) {
-    console.log("❌ ERROR en longitud de name:", name.length);
     res.status(400).json({ error: "name must be between 3 and 50 characters" });
     return;
   }
 
   if (!email || typeof email !== "string" || !email.includes("@")) {
-    console.log("❌ ERROR en email:", email);
     res.status(400).json({ error: "Valid email is required" });
     return;
   }
@@ -32,19 +27,16 @@ export const validateCreateUser = (
     typeof birthdate !== "string" ||
     isNaN(Date.parse(birthdate))
   ) {
-    console.log("❌ ERROR en birthdate:", birthdate);
     res.status(400).json({ error: "Valid birthdate is required" });
     return;
   }
 
   if (!nDni || typeof nDni !== "number") {
-    console.log("❌ ERROR en nDni:", nDni);
     res.status(400).json({ error: "nDni is required and must be a number" });
     return;
   }
 
   if (!username || typeof username !== "string") {
-    console.log("❌ ERROR en username:", username);
     res
       .status(400)
       .json({ error: "Username is required and must be a string" });
@@ -52,7 +44,6 @@ export const validateCreateUser = (
   }
 
   if (!password || typeof password !== "string" || password.length < 6) {
-    console.log("❌ ERROR en password:", password);
     res.status(400).json({
       error: "Password is required and must be at least 6 characters long",
     });

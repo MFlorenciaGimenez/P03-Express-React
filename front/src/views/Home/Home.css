@@ -1,17 +1,17 @@
-
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: #fffdfc; 
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #fffdfc;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: #333;
 }
 
@@ -19,19 +19,19 @@ html, body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #fffdfc; 
+  background-color: #fffdfc;
   color: #333;
   text-align: center;
 }
 
 .header {
-  margin-top: 4rem;
+  margin-top: 2rem;
   margin-bottom: 2rem;
 }
 
 .restaurant-title {
   font-size: 4rem;
-  color: #d6336c; 
+  color: #d6336c;
   font-weight: bold;
   letter-spacing: 2px;
 }
@@ -52,7 +52,7 @@ html, body {
 }
 
 .cta {
-  background-color: #f78fb3; 
+  background-color: #f78fb3;
   color: #fff;
   text-align: center;
   padding: 3rem 1rem;

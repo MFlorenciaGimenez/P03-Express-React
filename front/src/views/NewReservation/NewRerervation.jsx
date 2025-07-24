@@ -58,7 +58,7 @@ const NewReservation = () => {
         const userId = user?.id;
 
         if (!userId) {
-          alert("❌ User not found. Please log in again.");
+          alert("User not found. Please log in again.");
           setSubmitting(false);
           return;
         }
@@ -87,10 +87,10 @@ const NewReservation = () => {
               time: error.response.data.error || "Failed to create reservation",
             });
           } else {
-            alert("❌ Network error, please try again later");
+            alert("Network error, please try again later");
           }
         } else {
-          alert("❌ Unexpected error");
+          alert("Unexpected error");
         }
       } finally {
         setSubmitting(false);
@@ -103,7 +103,7 @@ const NewReservation = () => {
     const date = new Date(year, month - 1, day);
     const dayOfWeek = date.getDay();
     if (dayOfWeek === 0 || dayOfWeek === 6) {
-      alert("🚫 Weekends are not allowed. Please choose a weekday.");
+      alert("We closed on Weekends. Please choose a weekday.");
       e.target.value = "";
       formik.setFieldValue("date", "");
     }

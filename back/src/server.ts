@@ -1,4 +1,4 @@
-import express  from "express";
+import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 
@@ -10,6 +10,5 @@ server.use(morgan("dev"));
 server.use(cors());
 server.use(express.json());
 server.use(router);
-
 
 export default server;

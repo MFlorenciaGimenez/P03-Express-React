@@ -1,32 +1,31 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
-import { User } from "./User"
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { User } from "./User";
 
 export enum ReservationStatus {
-    ACTIVE = "active",
-    CANCELLED = "cancelled",
+  ACTIVE = "active",
+  CANCELLED = "cancelled",
 }
 
 @Entity({
-    name:"reservations"
+  name: "reservations",
 })
+export class Reservation {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-export class Reservation{
-    @PrimaryGeneratedColumn()
-    id : number
+  @Column()
+  date: string;
 
-    @Column()
-    date : string
+  @Column()
+  time: string;
 
-    @Column()
-    time : string
+  @Column({
+    type: "enum",
+    enum: ReservationStatus,
+    default: ReservationStatus.ACTIVE,
+  })
+  status: ReservationStatus;
 
-    @Column({
-        type: "enum",
-        enum: ReservationStatus,
-        default: ReservationStatus.ACTIVE,
-    })
-    status: ReservationStatus
-
-    @ManyToOne( () => User, (user)=> user.reservations)
-    user: User;
-};
+  @ManyToOne(() => User, (user) => user.reservations)
+  user: User;
+}

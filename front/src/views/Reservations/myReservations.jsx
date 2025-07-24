@@ -1,6 +1,6 @@
+import "./MyReservations.css";
 import { useState, useEffect } from "react";
 import ReservationCard from "../../components/Reservation/Reservation";
-import "./MyReservations.css";
 import axios from "axios";
 const GETRESERVATIONS_URL = "http://localhost:3000/appointments";
 
@@ -11,7 +11,7 @@ const MyReservations = () => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
 
     if (!storedUser || !storedUser.id) {
-      alert("⚠️ User not found. Please log in again.");
+      alert("User not found. Please log in again.");
       return;
     }
 
@@ -23,7 +23,7 @@ const MyReservations = () => {
       })
       .catch((error) => {
         console.error(error);
-        alert("❌ Could not load your reservations");
+        alert("Could not load your reservations");
       });
   }, []);
 
@@ -38,10 +38,10 @@ const MyReservations = () => {
       );
 
       setReservations(updated);
-      alert("✅ Reservation cancelled");
+      alert("Reservation cancelled");
     } catch (error) {
       console.error(error);
-      alert("❌ Could not cancel reservation");
+      alert("Could not cancel reservation");
     }
   };
 
