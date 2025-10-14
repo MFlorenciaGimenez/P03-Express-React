@@ -3,6 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import "./Home.css";
 import HomeCard from "../../components/HomeCard/HomeCard";
+import chickenKarage from "../../assets/chickenKarage.jpg";
+import sushi from "../../assets/sushi.jpeg";
+import tonkotsu from "../../assets/tonkotsu.jpg";
+import restaurant from "../../assets/restaurant.png";
+import Footer from "../../components/Footer/Footer";
 
 const Home = () => {
   const { user } = useContext(AuthContext);
@@ -17,45 +22,63 @@ const Home = () => {
   };
   return (
     <div className="home-container">
-      <header className="header">
-        <h1 className="restaurant-title">Sakura</h1>
-        <h2 className="restaurant-subtitle">
-          A little piece of Asia in Buenos Aires🌸
-        </h2>
-      </header>
+      {/* HERO SECTION */}
+      <section>
+        <div>
+          <h1 className="restaurant-title">
+            Experience the Art of Japanese Cuisine
+          </h1>
+          <p className="restaurant-subtitle">
+            a taste of Tokyo in the Heart of the City
+          </p>
+          <button onClick={handleReserveClick} className="btn-primary">
+            Book a table
+          </button>
+        </div>
+      </section>
+
+      {/* ABOUT US SECTION */}
+      <section className="about">
+        <h1>About Us</h1>
+        <div className="about-container">
+          <div className="about-text">
+            <h3>Our Philosophy </h3>
+            <p>
+              Sakura is dedicated to providing an authentic japanese dining
+              experience, combining traditional techniques with the freshest
+              ingredients. Our commitment to quality and hospitality is
+              reflected in every dish we serve
+            </p>
+          </div>
+          <div className="about-image">
+            <img src={restaurant} alt="Japanese interior" />
+          </div>
+        </div>
+      </section>
+
       <section className="about-cards">
+        <h3>Menu Highlights</h3>
         <HomeCard
-          icon="🌸"
-          title="Zen atmosphere"
-          description="Relax in a space inspired by Japanese gardens and the sound of water"
+          image={sushi}
+          title="Signature Sushi Platter"
+          description="An assortment of our finest, freshest sushi and sashimi"
+          price="$45"
         />
         <HomeCard
-          icon="🍣"
-          title="Fusion cuisine"
-          description="Enjoy sushi, ramen and other exclusive Asian dishes made with fresh ingredients"
+          image={tonkotsu}
+          title="Tonkotsu Ramen"
+          description="Rich and creamy pork bone broch, with chashu pork and soft-boiled eggs"
+          price="$22"
         />
         <HomeCard
-          icon="🍵"
-          title="Traditional tea and desserts"
-          description="Try our traditional teas and our special dessert inspired by Hanami"
+          image={chickenKarage}
+          title="Chicken Karaage"
+          description="Crispy japanese-style fried chicken, served with a lemon wedge"
+          price="$15"
         />
       </section>
 
-      <section className="cta">
-        <h2>Are you ready to live the experience?</h2>
-        <p>
-          Book your table and experience the magic of Asia with us.
-          <br />
-          Our opening hours are Monday to Friday, from 8 a.m. to 8 p.m.
-        </p>
-        <button onClick={handleReserveClick} className="cta-button">
-          Reserve a table
-        </button>
-      </section>
-
-      <footer className="footer">
-        <p>&copy; Copyright 2025 Sakura. All Rights Reserved.</p>
-      </footer>
+      <Footer />
     </div>
   );
 };

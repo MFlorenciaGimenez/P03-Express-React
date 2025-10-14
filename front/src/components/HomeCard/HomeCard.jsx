@@ -1,12 +1,14 @@
 import "./HomeCard.css";
 
-const HomeCard = ({ icon, title, description }) => {
+const HomeCard = ({ image, price, title, description }) => {
   return (
     <div className="card">
-      <h3>
-        {icon} {title}
-      </h3>
+      <div className="card-img-container">
+        {image && <img src={image} alt={title} className="card-img"></img>}
+      </div>
+      <h3>{title}</h3>
       <p>{description}</p>
+      <p>{price}</p>
     </div>
   );
 };
