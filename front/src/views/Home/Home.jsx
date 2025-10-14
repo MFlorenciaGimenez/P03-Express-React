@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import "./Home.css";
 import HomeCard from "../../components/HomeCard/HomeCard";
@@ -22,14 +22,14 @@ const Home = () => {
   };
   return (
     <div className="home-container">
-      {/* HERO SECTION */}
-      <section>
-        <div>
+      {/* 1. HERO SECTION  */}
+      <section className="hero">
+        <div className="hero-overlay">
           <h1 className="restaurant-title">
             Experience the Art of Japanese Cuisine
           </h1>
           <p className="restaurant-subtitle">
-            a taste of Tokyo in the Heart of the City
+            A taste of Tokyo in the Heart of the City
           </p>
           <button onClick={handleReserveClick} className="btn-primary">
             Book a table
@@ -39,7 +39,7 @@ const Home = () => {
 
       {/* ABOUT US SECTION */}
       <section className="about">
-        <h1>About Us</h1>
+        <h1 className="about-title">About Us</h1>
         <div className="about-container">
           <div className="about-text">
             <h3>Our Philosophy </h3>
@@ -56,26 +56,33 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="about-cards">
+      <section className="menu">
         <h3>Menu Highlights</h3>
-        <HomeCard
-          image={sushi}
-          title="Signature Sushi Platter"
-          description="An assortment of our finest, freshest sushi and sashimi"
-          price="$45"
-        />
-        <HomeCard
-          image={tonkotsu}
-          title="Tonkotsu Ramen"
-          description="Rich and creamy pork bone broch, with chashu pork and soft-boiled eggs"
-          price="$22"
-        />
-        <HomeCard
-          image={chickenKarage}
-          title="Chicken Karaage"
-          description="Crispy japanese-style fried chicken, served with a lemon wedge"
-          price="$15"
-        />
+        <div className="menu-grid">
+          <HomeCard
+            image={sushi}
+            title="Signature Sushi Platter"
+            description="An assortment of our finest, freshest sushi and sashimi"
+            price="$45"
+          />
+          <HomeCard
+            image={tonkotsu}
+            title="Tonkotsu Ramen"
+            description="Rich and creamy pork bone broch, with chashu pork and soft-boiled eggs"
+            price="$22"
+          />
+          <HomeCard
+            image={chickenKarage}
+            title="Chicken Karaage"
+            description="Crispy japanese-style fried chicken, served with a lemon wedge"
+            price="$15"
+          />
+        </div>
+        <div className="menu-action">
+          <Link to="/menu" className="btn-secondary">
+            See Full Menu
+          </Link>
+        </div>
       </section>
 
       <Footer />

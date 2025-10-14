@@ -14,10 +14,13 @@ const NavBar = () => {
 
   return (
     <nav className="navbar">
-      <div className="navbar-title">Sakura 🌸</div>
+      <div className="navbar-title">Sakura </div>
       <ul className="navbar-links">
         <li>
           <Link to="/">Home</Link>
+        </li>
+        <li>
+          <Link to="/Menu">Menu</Link>
         </li>
         {!user && (
           <>
@@ -29,10 +32,13 @@ const NavBar = () => {
             </li>
           </>
         )}
+
         {user && (
           <>
             <li>
-              <Link to="/new-reservation">Make Reservation</Link>
+              <Link to="/new-reservation" className="btn-primary">
+                Book a table
+              </Link>
             </li>
             <li>
               <Link to="/reservations">My Reservations</Link>
