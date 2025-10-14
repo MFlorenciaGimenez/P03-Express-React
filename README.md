@@ -9,8 +9,8 @@ It showcases a simple web app with a **React frontend** and an **Express backend
 
 The goal of this project was to practice and reinforce my skills in:
 
-- **Frontend development** using React.  
-- **Backend development** with Express.js.  
+- **Frontend development** using React + js.  
+- **Backend development** with Express.js and TypeScript.  
 - Structuring a full stack application with separate client and server layers.  
 - Handling routing, API calls, and dynamic data.  
 
