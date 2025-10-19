@@ -7,6 +7,7 @@ import {
 import { getUserByIdService } from "../services/userService";
 import { validateCredentialService } from "../services/credentialService";
 import { User } from "../entities/User";
+import { Any } from "typeorm";
 
 export const getAllUsers = async (req: Request, res: Response) => {
   try {
@@ -30,30 +31,29 @@ export const getUserById = async (req: Request, res: Response) => {
   }
 };
 export const registerUser = async (req: Request, res: Response) => {
-  const { name, email, birthdate, nDni, username, password } = req.body;
+  const { name, email, birthdate, password } = req.body;
 
   try {
     const newUser: User = await createUserService({
       name,
       email,
       birthdate,
-      nDni,
-      username,
       password,
     });
     res.status(201).json(newUser);
-  } catch (error) {
+  } catch (error: any) {
+    console.error(error.message);
     res.status(400).json({
-      message: "couldnt login",
+      message: "EMAIL ALREADY REGISTERED",
     });
   }
 };
 
 export const loginUser = async (req: Request, res: Response) => {
   try {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
     const credential: number = await validateCredentialService({
-      username,
+      email,
       password,
     });
     const user = await findUserByCredentialId(credential);
@@ -61,7 +61,7 @@ export const loginUser = async (req: Request, res: Response) => {
     res.status(200).json(user);
   } catch (error) {
     res.status(400).json({
-      message: "couldn't login",
+      message: "failed to logIn",
     });
   }
 };

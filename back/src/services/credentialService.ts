@@ -5,13 +5,13 @@ import { credentialRepository } from "../repositories/indexRepository";
 export const createCredentialService = async (
   createCredentialDto: IcreatecredentialsDto
 ): Promise<Credential> => {
-  const { username, password } = createCredentialDto;
+  const { email, password } = createCredentialDto;
   const foundCredential: Credential | null =
-    await credentialRepository.findOneBy({ username });
-  if (foundCredential) throw new Error(`credential ${username} already exist`);
+    await credentialRepository.findOneBy({ email });
+  if (foundCredential) throw new Error(`credential ${email} already exist`);
 
   const newCredential: Credential = credentialRepository.create({
-    username,
+    email,
     password,
   });
   await credentialRepository.save(newCredential);
@@ -21,9 +21,9 @@ export const createCredentialService = async (
 export const validateCredentialService = async (
   validateCredentialDto: IcreatecredentialsDto
 ): Promise<number> => {
-  const { username, password } = validateCredentialDto;
+  const { email, password } = validateCredentialDto;
   const credential: Credential | null = await credentialRepository.findOneBy({
-    username,
+    email,
   });
   if (!credential) {
     throw new Error("Credential not found");

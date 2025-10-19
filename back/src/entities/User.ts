@@ -25,9 +25,6 @@ export class User {
   @Column()
   birthdate: string;
 
-  @Column()
-  nDni: number;
-
   @OneToOne(() => Credential)
   @JoinColumn({ name: "credential_id" })
   credential: Credential;

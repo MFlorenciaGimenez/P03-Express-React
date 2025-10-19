@@ -7,7 +7,7 @@ import {
   loginUser,
 } from "../controllers/userControllers";
 import { validateCreateUser } from "../middlewares/validateUser";
-
+console.log("✅ userRouter cargado");
 const userRouter = Router();
 
 userRouter.get("/", getAllUsers);

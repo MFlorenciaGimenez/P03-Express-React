@@ -6,7 +6,7 @@ export const validateCreateUser = (
   res: Response,
   next: NextFunction
 ): void => {
-  const { name, email, birthdate, nDni, username, password } = req.body;
+  const { name, email, birthdate, password } = req.body;
 
   if (!name || typeof name !== "string") {
     res.status(400).json({ error: "Name is required and must be a string" });
@@ -28,18 +28,6 @@ export const validateCreateUser = (
     isNaN(Date.parse(birthdate))
   ) {
     res.status(400).json({ error: "Valid birthdate is required" });
-    return;
-  }
-
-  if (!nDni || typeof nDni !== "number") {
-    res.status(400).json({ error: "nDni is required and must be a number" });
-    return;
-  }
-
-  if (!username || typeof username !== "string") {
-    res
-      .status(400)
-      .json({ error: "Username is required and must be a string" });
     return;
   }
 

@@ -1,19 +1,28 @@
+import { useState, useEffect, useContext } from "react";
 import { useFormik } from "formik";
-import { useContext } from "react";
-import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
-import "../StylesForm/StylesForm.css";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
+import FormField from "../FormField/FormFiel";
+import API_URL from "../../config/api";
 
 const Register = () => {
-  const { login } = useContext(AuthContext);
+  const [showPassword, setShowPassword] = useState(false);
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const [serverError, setServerError] = useState("");
+  const [emailChecking, setEmailChecking] = useState(false);
+
+  useEffect(() => {
+    if (user) navigate("/");
+  }, [user, navigate]);
 
   const formik = useFormik({
     initialValues: {
       name: "",
       email: "",
       birthdate: "",
-      nDni: "",
-      username: "",
       password: "",
     },
     validate: (values) => {
@@ -21,12 +30,6 @@ const Register = () => {
       if (!values.name.trim()) errors.name = "Name is required";
       if (!values.email.trim()) errors.email = "Email is required";
       if (!values.birthdate) errors.birthdate = "Birthdate is required";
-      if (!values.nDni.trim()) {
-        errors.nDni = "DNI is required";
-      } else if (!/^\d+$/.test(values.nDni)) {
-        errors.nDni = "DNI must be a number";
-      }
-      if (!values.username.trim()) errors.username = "Username is required";
       if (!values.password.trim()) {
         errors.password = "Password is required";
       } else if (values.password.length < 6) {
@@ -35,166 +38,129 @@ const Register = () => {
       return errors;
     },
     onSubmit: async (values, { setSubmitting, setErrors, resetForm }) => {
+      setServerError("");
       try {
-        const payload = {
-          ...values,
-          nDni: Number(values.nDni),
-        };
-
-        const response = await axios.post(
-          "http://localhost:3000/users/register",
-          payload
-        );
-
-        login(response.data);
-
-        resetForm();
+        await axios.post(`${API_URL}/users/register`, values);
         alert("User registered successfully!");
+        resetForm();
+        navigate("/login");
       } catch (error) {
-        if (axios.isAxiosError(error)) {
-          if (error.response) {
+        if (axios.isAxiosError(error) && error.response) {
+          const message = error.response.data.message || "Registration failed";
+          if (message.toLowerCase().includes("email")) {
             setErrors({
-              email: error.response.data.message || "Registration failed",
+              email:
+                "This email address is already registered. Please sign in.",
             });
           } else {
-            console.error("Error sin respuesta:", error);
+            setServerError(message);
           }
         } else {
-          console.error("Error desconocido:", error);
+          setServerError(
+            "Could not connect to the server. Please check your network."
+          );
         }
       } finally {
         setSubmitting(false);
       }
     },
   });
+
+  useEffect(() => {
+    if (!formik.values.email || formik.errors.email) return;
+
+    const timeoutId = setTimeout(async () => {
+      setEmailChecking(true);
+      try {
+        await axios.get(
+          `${API_URL}/users/check-email?email=${formik.values.email}`
+        );
+        formik.setFieldError("email", undefined);
+      } catch (error) {
+        if (axios.isAxiosError(error) && error.response) {
+          if (error.response.status === 409 || error.response.status === 400) {
+            formik.setFieldError(
+              "email",
+              "This email address is already registered. Please sign in."
+            );
+          }
+        }
+      } finally {
+        setEmailChecking(false);
+      }
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [formik.values.email]);
+
   return (
-    <div className="form-wrapper">
-      <div className="form-container">
-        <h2 className="form-title">Registration</h2>
-        <form onSubmit={formik.handleSubmit} className="form">
-          <div className="form-group">
-            <label htmlFor="name" className="form-label">
-              Name
-            </label>
-            <input
+    <div className="form-page-wrapper">
+      <div className="form-card form-register-card">
+        <div className="form-content">
+          <h2 className="form-title">Create Account</h2>
+          <p className="form-subtitle">Sign up to continue</p>
+
+          <form onSubmit={formik.handleSubmit} className="form">
+            <FormField
+              label="Name"
               id="name"
               name="name"
-              type="text"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.name}
-              className="form-input"
               placeholder="Enter your name"
+              formik={formik}
             />
-            {formik.touched.name && formik.errors.name ? (
-              <div className="error-message">{formik.errors.name}</div>
-            ) : null}
-          </div>
 
-          <div className="form-group">
-            <label htmlFor="email" className="form-label">
-              Email
-            </label>
-            <input
+            <FormField
+              label="Email Address"
               id="email"
               name="email"
               type="email"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.email}
-              className="form-input"
               placeholder="Enter your email"
-            />
-            {formik.touched.email && formik.errors.email ? (
-              <div className="error-message">{formik.errors.email}</div>
-            ) : null}
-          </div>
+              formik={formik}
+            >
+              {emailChecking &&
+                formik.values.email.trim() &&
+                !formik.errors.email && (
+                  <div className="info-message">Verifying availability...</div>
+                )}
+            </FormField>
 
-          <div className="form-group">
-            <label htmlFor="birthdate" className="form-label">
-              Birthdate
-            </label>
-            <input
+            <FormField
+              label="Birthdate"
               id="birthdate"
               name="birthdate"
               type="date"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.birthdate}
-              className="form-input"
+              formik={formik}
             />
-            {formik.touched.birthdate && formik.errors.birthdate ? (
-              <div className="error-message">{formik.errors.birthdate}</div>
-            ) : null}
-          </div>
 
-          <div className="form-group">
-            <label htmlFor="nDni" className="form-label">
-              DNI
-            </label>
-            <input
-              id="nDni"
-              name="nDni"
-              type="text"
-              inputMode="numeric"
-              pattern="[0-9]*"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.nDni}
-              className="form-input"
-              placeholder="Enter your DNI number"
-            />
-            {formik.touched.nDni && formik.errors.nDni ? (
-              <div className="error-message">{formik.errors.nDni}</div>
-            ) : null}
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="username" className="form-label">
-              Username
-            </label>
-            <input
-              id="username"
-              name="username"
-              type="text"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.username}
-              className="form-input"
-              placeholder="Choose a username"
-            />
-            {formik.touched.username && formik.errors.username ? (
-              <div className="error-message">{formik.errors.username}</div>
-            ) : null}
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="password" className="form-label">
-              Password
-            </label>
-            <input
+            <FormField
+              label="Password"
               id="password"
               name="password"
               type="password"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.password}
-              className="form-input"
               placeholder="Enter a password"
+              formik={formik}
+              showPassword={showPassword}
+              setShowPassword={setShowPassword}
             />
-            {formik.touched.password && formik.errors.password ? (
-              <div className="error-message">{formik.errors.password}</div>
-            ) : null}
-          </div>
 
-          <button
-            type="submit"
-            className="submit-button"
-            disabled={formik.isSubmitting}
-          >
-            Register
-          </button>
-        </form>
+            <button
+              type="submit"
+              className="submit-button"
+              disabled={formik.isSubmitting || emailChecking}
+            >
+              Register
+            </button>
+
+            {serverError && <div className="error-message">{serverError}</div>}
+          </form>
+
+          <p className="form-footer-link">
+            Already have an account?{" "}
+            <a href="/login" className="signup-link">
+              Sign In
+            </a>
+          </p>
+        </div>
       </div>
     </div>
   );

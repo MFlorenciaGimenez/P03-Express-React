@@ -28,24 +28,11 @@ export const getUserByIdService = async (id: number) => {
 export const createUserService = async (
   createUserDto: ICreateUserDto
 ): Promise<User> => {
-  const { name, email, birthdate, nDni, username, password } = createUserDto;
+  const { name, email, birthdate, password } = createUserDto;
 
-  const foundUser: User | null = await userRepository.findOneBy({ email });
-  if (foundUser) {
-    throw new Error("User already registed");
-  }
-  const newCredential: Credential = await createCredentialService({
-    username,
-    password,
-  });
-  const newUser: User = userRepository.create({
-    name,
-    email,
-    birthdate,
-    nDni,
-  });
-  await userRepository.save(newUser);
-  newUser.credential = newCredential;
+  await createCredentialService({ email, password });
+
+  const newUser: User = userRepository.create({ name, email, birthdate });
   await userRepository.save(newUser);
   return newUser;
 };
@@ -57,7 +44,7 @@ export const findUserByCredentialId = async (
     credential: { id: credentialsId },
   });
   if (!user) {
-    throw new Error("Can not find the user");
+    throw new Error("user not found");
   }
   return user;
 };

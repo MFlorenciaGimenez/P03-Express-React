@@ -1,5 +1,5 @@
 interface IcreatecredentialsDto {
-  username: string;
+  email: string;
   password: string;
 }
 
