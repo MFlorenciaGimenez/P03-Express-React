@@ -4,6 +4,7 @@ import { User } from "../entities/User";
 import { Reservation } from "../entities/Reservation";
 import { DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT, DB_USER } from "./envs";
 import { Credential } from "../entities/Credential";
+import { MenuItems } from "../entities/MenuItems";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -15,7 +16,7 @@ export const AppDataSource = new DataSource({
   synchronize: true,
   dropSchema: false,
   logging: false,
-  entities: [User, Reservation, Credential],
+  entities: [User, Reservation, Credential, MenuItems],
   subscribers: [],
   migrations: [],
 });
