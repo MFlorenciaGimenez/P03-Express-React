@@ -10,6 +10,18 @@
   font-family: sans-serif;
 }
 
+.navbar-logo {
+  height: 38px; /* controla el alto del logo */
+  width: auto; /* mantiene proporción */
+  object-fit: contain; /* evita deformaciones */
+  margin-right: 8px; /* pequeño espacio antes del texto */
+  display: block;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+}
 .navbar-title {
   font-size: 1.5rem;
   font-weight: bold;

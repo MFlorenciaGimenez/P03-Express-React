@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import "./NavBar.css";
+import logo from "../../assets/logo.jpg";
 import { AuthContext } from "../../context/AuthContext";
 
 const NavBar = () => {
@@ -14,7 +15,11 @@ const NavBar = () => {
 
   return (
     <nav className="navbar">
-      <div className="navbar-title">Sakura </div>
+      <div className="navbar-brand">
+        <img src={logo} alt="logo" className="navbar-logo" />
+        <span className="navbar-title">Sakura </span>
+      </div>
+
       <ul className="navbar-links">
         <li>
           <Link to="/">Home</Link>

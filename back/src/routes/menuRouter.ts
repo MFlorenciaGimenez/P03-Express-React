@@ -1,8 +1,10 @@
 import { Router } from "express";
-import { getMenu } from "../controllers/menuItemController";
+import { addMenuItem, getMenu } from "../controllers/menuItemController";
 
 const menuRouter = Router();
 
 menuRouter.get("/", getMenu);
+
+menuRouter.post("/", addMenuItem);
 
 export default menuRouter;

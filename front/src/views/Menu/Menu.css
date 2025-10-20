@@ -2,7 +2,7 @@
   width: 100%;
   max-width: 1440px;
   margin: 0 auto;
-  padding: 3.5rem 2rem 5rem;
+  padding: 1rem 2rem 5rem;
   background-color: var(--color-background-light);
   color: var(--color-text-dark);
 }
@@ -40,7 +40,7 @@
 
 .menu-page footer,
 footer {
-  margin-top: 5rem;
+  margin-top: 1.5rem;
 }
 
 @media (max-width: 1024px) {

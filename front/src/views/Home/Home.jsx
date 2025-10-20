@@ -58,7 +58,7 @@ const Home = () => {
 
       <section className="menu">
         <h3>Menu Highlights</h3>
-        <div className="menu-grid">
+        <div className="home-menu-grid">
           <HomeCard
             image={sushi}
             title="Signature Sushi Platter"

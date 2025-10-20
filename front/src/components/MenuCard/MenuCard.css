@@ -4,7 +4,7 @@
   overflow: hidden;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
-  width: 190px; /* 🔹 más pequeñas */
+  width: 190px;
   display: flex;
   flex-direction: column;
 }
@@ -14,17 +14,19 @@
   box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
 }
 
-/* ===== Imagen ===== */
 .image-wrapper {
   width: 100%;
-  height: 100px; /* 🔹 más compacta */
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
 }
 
 .menu-card-image {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   transition: transform 0.3s ease;
 }
 
@@ -32,12 +34,11 @@
   transform: scale(1.04);
 }
 
-/* ===== Contenido ===== */
 .menu-card-content {
   padding: 0.5rem 0.6rem 0.6rem;
   display: flex;
   flex-direction: column;
-  line-height: 1.1; /* 🔹 más compacto entre líneas */
+  line-height: 1.1;
 }
 
 .menu-card-content h3,
@@ -45,7 +46,7 @@
 .menu-card-content span {
   margin: 0;
   padding: 0;
-  text-align: left !important; /* evita interferencias de app.css */
+  text-align: left !important;
 }
 
 .menu-card-content h3 {
@@ -68,18 +69,16 @@
   margin-top: 0.05rem;
 }
 
-/* ===== Grid ===== */
 .menu-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 0.9rem;
-  justify-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  justify-content: flex-start;
   margin-top: 1rem;
-  margin-bottom: 6rem; /* 🔹 más separación con el footer */
+  margin-bottom: 6rem;
   padding: 0 1rem;
 }
 
-/* ===== Responsive ===== */
 @media (max-width: 768px) {
   .menu-grid {
     grid-template-columns: repeat(2, 1fr);
