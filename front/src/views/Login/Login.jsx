@@ -82,13 +82,7 @@ const Login = () => {
               formik={formik}
               showPassword={showPassword}
               setShowPassword={setShowPassword}
-            >
-              <div className="form-label-row">
-                <a href="/forgot-password" className="forgot-link">
-                  Forgot Password?
-                </a>
-              </div>
-            </FormField>
+            ></FormField>
 
             <button
               type="submit"

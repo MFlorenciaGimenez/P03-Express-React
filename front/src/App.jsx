@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import Home from "./views/Home/Home";
+import Menu from "./views/Menu/Menu";
 import NavBar from "./components/NavBar/NavBar";
 import MyReservation from "./views/Reservations/myReservations";
 import Register from "./views/register/Register";
@@ -14,6 +15,7 @@ function App() {
       <NavBar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/menu" element={<Menu />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route

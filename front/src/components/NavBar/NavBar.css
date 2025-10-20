@@ -3,7 +3,7 @@
   background-color: #ffffff;
   background-color: var(--color-background-light);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-  padding: 15px 30px;
+  padding: 10px 30px;
   display: flex;
   justify-content: space-between;
   align-items: center;
