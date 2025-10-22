@@ -7,7 +7,6 @@ import {
 import { getUserByIdService } from "../services/userService";
 import { validateCredentialService } from "../services/credentialService";
 import { User } from "../entities/User";
-import { Any } from "typeorm";
 
 export const getAllUsers = async (req: Request, res: Response) => {
   try {
@@ -51,6 +50,8 @@ export const registerUser = async (req: Request, res: Response) => {
 
 export const loginUser = async (req: Request, res: Response) => {
   try {
+    console.log(req.body);
+
     const { email, password } = req.body;
     const credential: number = await validateCredentialService({
       email,

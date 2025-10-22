@@ -33,10 +33,16 @@ export const getReservationById = async (req: Request, res: Response) => {
 };
 export const createReservation = async (req: Request, res: Response) => {
   try {
-    const { date, time, userId } = req.body;
-    const reservation = await createReservationService({ date, time, userId });
+    const { date, time, userId, partySize } = req.body;
+    const reservation = await createReservationService({
+      date,
+      time,
+      userId,
+      partySize,
+    });
     res.status(201).json(reservation);
-  } catch (error) {
+  } catch (error: any) {
+    console.error("Error creating reservation:", error.message);
     res.status(400).json({
       message: "cannot create a new reservation",
     });

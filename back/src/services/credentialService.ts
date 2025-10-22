@@ -25,6 +25,7 @@ export const validateCredentialService = async (
   const credential: Credential | null = await credentialRepository.findOneBy({
     email,
   });
+  console.log("Found credential:", credential);
   if (!credential) {
     throw new Error("Credential not found");
   }

@@ -30,18 +30,32 @@ export const createUserService = async (
 ): Promise<User> => {
   const { name, email, birthdate, password } = createUserDto;
 
-  await createCredentialService({ email, password });
+  const foundUser: User | null = await userRepository.findOneBy({ email });
+  if (foundUser) throw new Error("User already registered");
 
-  const newUser: User = userRepository.create({ name, email, birthdate });
+  const newCredential: Credential = await createCredentialService({
+    email,
+    password,
+  });
+
+  const newUser: User = userRepository.create({
+    name,
+    email,
+    birthdate,
+    credential: newCredential,
+  });
+
   await userRepository.save(newUser);
+
   return newUser;
 };
 
 export const findUserByCredentialId = async (
   credentialsId: number
 ): Promise<User | null> => {
-  const user: User | null = await userRepository.findOneBy({
-    credential: { id: credentialsId },
+  const user: User | null = await userRepository.findOne({
+    where: { credential: { id: credentialsId } },
+    relations: ["credential"],
   });
   if (!user) {
     throw new Error("user not found");
