@@ -5,6 +5,7 @@ import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
 import "../StylesForm/StylesForm.css";
 import FormField from "../FormField/FormFiel";
+import API_URL from "../../config/api";
 
 const Login = () => {
   const { login, user } = useContext(AuthContext);
@@ -32,10 +33,7 @@ const Login = () => {
       setLoginError("");
 
       try {
-        const response = await axios.post(
-          "http://localhost:3000/users/login",
-          values
-        );
+        const response = await axios.post(`${API_URL}/users/login`, values);
         login(response.data);
         navigate("/");
       } catch (error) {

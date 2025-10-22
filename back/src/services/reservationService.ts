@@ -35,7 +35,8 @@ export const createReservationService = async ({
   time,
   userId,
   partySize,
-}: IreservationDto): Promise<Reservation | undefined> => {
+  specialRequest,
+}: IreservationDto): Promise<Reservation> => {
   const now = new Date();
   const reservationDateTime = new Date(`${date}T${time}`);
   if (reservationDateTime < now) throw new Error("Cannot reserve in the past");
@@ -51,34 +52,44 @@ export const createReservationService = async ({
   ];
   const day = dayNames[reservationDateTime.getDay()];
   const hours = WORKING_HOURS[day];
-
   if (!hours) throw new Error("Restaurant closed on that day");
 
   const hour = parseInt(time.split(":")[0]);
-
-  if (hour < hours.open || hour >= hours.close) {
+  if (hour < hours.open || hour >= hours.close)
     throw new Error(
       `Restaurant is closed at that time (${day} hours: ${hours.open}:00–${hours.close}:00)`
     );
-  }
-  const user: User | null = await userRepository.findOneBy({
-    id: userId,
-  });
-  if (!user) {
-    throw new Error(`user with id: ${userId} does not exist`);
-  }
 
-  const reservations = await reservationRepository.find({
-    where: { date, time, status: ReservationStatus.ACTIVE },
-    relations: ["table"],
-  });
+  const user = await userRepository.findOneBy({ id: userId });
+  if (!user) throw new Error(`User with id ${userId} does not exist`);
+
   const availableTables = await restaurantTableRepository.find({
     where: { capacity: MoreThanOrEqual(partySize), isAvailable: true },
   });
-  const reservedTableIds = reservations.map((r) => r.table.id);
-  const freeTables = availableTables.filter(
-    (t) => !reservedTableIds.includes(t.id)
+
+  if (availableTables.length === 0)
+    throw new Error("No tables available that match the required capacity");
+
+  const reservationDuration = 60;
+  const reservationStart = new Date(`${date}T${time}`);
+  const reservationEnd = new Date(
+    reservationStart.getTime() + reservationDuration * 60000
   );
+
+  const existingReservations = await reservationRepository.find({
+    where: { date, status: ReservationStatus.ACTIVE },
+    relations: ["table"],
+  });
+
+  const freeTables = availableTables.filter((table) => {
+    const overlapping = existingReservations.some((r) => {
+      if (r.table.id !== table.id) return false;
+      const rStart = new Date(`${r.date}T${r.time}`);
+      const rEnd = new Date(rStart.getTime() + reservationDuration * 60000);
+      return rStart < reservationEnd && rEnd > reservationStart;
+    });
+    return !overlapping;
+  });
 
   if (freeTables.length === 0)
     throw new Error("No tables available for that time and party size");
@@ -93,6 +104,7 @@ export const createReservationService = async ({
     partySize,
     user,
     table: chosenTable,
+    specialRequest,
   });
 
   return await reservationRepository.save(newReservation);

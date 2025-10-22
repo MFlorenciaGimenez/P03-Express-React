@@ -1,178 +1,162 @@
-import { useFormik } from "formik";
-import "../StylesForm/StylesForm.css";
+import "./NewReservation.css";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import { useContext } from "react";
-import { ReservationContext } from "../../context/ReservationContext";
+import API_URL from "../../config/api";
+import ReservationCard from "../../components/Reservation/Reservation"; // reutilizás tu componente
 
-const NewReservation = () => {
-  const { addReservation } = useContext(ReservationContext);
+const BookTable = () => {
+  const [partySize, setPartySize] = useState(2);
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  const [specialRequest, setSpecialRequest] = useState("");
+  const [availableTimes, setAvailableTimes] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [lastReservation, setLastReservation] = useState(null); // 👈 nuevo estado
 
-  const generateTimeSlots = () => {
+  const storedUser = JSON.parse(localStorage.getItem("user"));
+
+  useEffect(() => {
+    if (!date) {
+      setAvailableTimes([]);
+      return;
+    }
+
+    const selectedDate = new Date(date);
+    const day = selectedDate.getDay();
+
+    let openHour, closeHour;
+    if (day === 0 || day === 6) {
+      openHour = 15;
+      closeHour = 24;
+    } else {
+      openHour = 17;
+      closeHour = 22;
+    }
+
     const times = [];
-    for (let hour = 8; hour <= 20; hour++) {
-      times.push(
-        `${hour.toString().padStart(2, "0")}:00`,
-        `${hour.toString().padStart(2, "0")}:30`
-      );
+    for (let h = openHour; h < closeHour; h++) {
+      times.push(`${String(h).padStart(2, "0")}:00`);
+      times.push(`${String(h).padStart(2, "0")}:30`);
     }
-    return times;
-  };
+    setAvailableTimes(times);
+    setTime("");
+  }, [date]);
 
-  const formik = useFormik({
-    initialValues: {
-      date: "",
-      time: "",
-    },
-    validate: (values) => {
-      const errors = {};
-      if (!values.date) {
-        errors.date = "Date is required";
-      } else {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!storedUser?.id) return alert("Please log in first.");
+    if (!time) return alert("Please select a valid time within opening hours.");
 
-        const [year, month, day] = values.date.split("-").map(Number);
-        const selectedDate = new Date(year, month - 1, day);
-        selectedDate.setHours(0, 0, 0, 0);
+    setLoading(true);
+    try {
+      const res = await axios.post(`${API_URL}/reservations`, {
+        date,
+        time,
+        userId: storedUser.id,
+        partySize,
+        specialRequest,
+      });
 
-        if (selectedDate < today) {
-          errors.date = "Date cannot be in the past";
-        }
-
-        const dayOfWeek = selectedDate.getDay();
-        if (dayOfWeek === 0 || dayOfWeek === 6) {
-          errors.date = "Weekends are not allowed";
-        }
-      }
-
-      if (!values.time) {
-        errors.time = "Time is required";
-      }
-
-      return errors;
-    },
-
-    onSubmit: async (values, { resetForm, setSubmitting, setErrors }) => {
-      try {
-        const user = JSON.parse(localStorage.getItem("user"));
-        const userId = user?.id;
-
-        if (!userId) {
-          alert("User not found. Please log in again.");
-          setSubmitting(false);
-          return;
-        }
-
-        const payload = {
-          userId,
-          ...values,
-        };
-
-        console.log("📤 Sending reservation data:", payload);
-
-        const response = await axios.post(
-          "http://localhost:3000/appointments/schedule",
-          payload
-        );
-
-        addReservation(response.data);
-
-        alert("✅ Reservation created successfully!");
-        resetForm();
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
-          if (error.response) {
-            setErrors({
-              date: error.response.data.error || "Failed to create reservation",
-              time: error.response.data.error || "Failed to create reservation",
-            });
-          } else {
-            alert("Network error, please try again later");
-          }
-        } else {
-          alert("Unexpected error");
-        }
-      } finally {
-        setSubmitting(false);
-      }
-    },
-  });
-
-  const disableWeekends = (e) => {
-    const [year, month, day] = e.target.value.split("-").map(Number);
-    const date = new Date(year, month - 1, day);
-    const dayOfWeek = date.getDay();
-    if (dayOfWeek === 0 || dayOfWeek === 6) {
-      alert("We closed on Weekends. Please choose a weekday.");
-      e.target.value = "";
-      formik.setFieldValue("date", "");
+      alert("Reservation created successfully!");
+      setLastReservation(res.data); // 👈 guardamos la reserva creada
+      setDate("");
+      setTime("");
+      setSpecialRequest("");
+    } catch (error) {
+      console.error(error);
+      alert(error.response?.data?.message || "Failed to create reservation");
+    } finally {
+      setLoading(false);
     }
   };
-
-  const today = new Date().toISOString().split("T")[0];
 
   return (
-    <div className="form-wrapper">
-      <div className="form-container">
-        <h2 className="form-title">Make a new reservation</h2>
-        <form onSubmit={formik.handleSubmit} className="form">
-          <div className="form-group">
-            <label htmlFor="date" className="form-label">
-              Date
-            </label>
-            <input
-              id="date"
-              name="date"
-              type="date"
-              min={today}
-              onChange={(e) => {
-                disableWeekends(e);
-                formik.handleChange(e);
-              }}
-              onBlur={formik.handleBlur}
-              value={formik.values.date}
-              className="form-input"
-            />
-            {formik.touched.date && formik.errors.date && (
-              <div className="form-error">{formik.errors.date}</div>
-            )}
-          </div>
+    <div className="book-page">
+      <div className="book-container">
+        {/* FORM */}
+        <form className="book-form" onSubmit={handleSubmit}>
+          <h2 className="book-title">Book a Table at Sakura</h2>
+          <p className="book-subtitle">
+            We look forward to hosting you at our restaurant.
+          </p>
 
-          <div className="form-group">
-            <label htmlFor="time" className="form-label">
+          <div className="row">
+            <label>
+              Number of guests
+              <select
+                value={partySize}
+                onChange={(e) => setPartySize(e.target.value)}
+              >
+                {[2, 4, 5, 6, 8, 10].map((n) => (
+                  <option key={n} value={n}>
+                    {n} people
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label>
               Time
-            </label>
-            <select
-              id="time"
-              name="time"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.time}
-              className="form-input"
-            >
-              <option value="">Select a time</option>
-              {generateTimeSlots().map((time) => (
-                <option key={time} value={time}>
-                  {time}
+              <select
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
+                required
+                disabled={!availableTimes.length}
+              >
+                <option value="">
+                  {availableTimes.length
+                    ? "Select a time"
+                    : "Select a date first"}
                 </option>
-              ))}
-            </select>
-            {formik.touched.time && formik.errors.time && (
-              <div className="form-error">{formik.errors.time}</div>
-            )}
+                {availableTimes.map((t) => (
+                  <option key={t} value={t}>
+                    {t}
+                  </option>
+                ))}
+              </select>
+            </label>
           </div>
 
-          <button
-            type="submit"
-            className="submit-button"
-            disabled={!(formik.isValid && formik.dirty) || formik.isSubmitting}
-          >
-            Reserve
+          <label>
+            Date
+            <input
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              required
+            />
+          </label>
+
+          <label>
+            Special Requests
+            <textarea
+              placeholder="e.g., allergies, seating preference"
+              value={specialRequest}
+              onChange={(e) => setSpecialRequest(e.target.value)}
+            />
+          </label>
+
+          <button type="submit" disabled={loading} className="btn-primary">
+            {loading ? "Booking..." : "Book Now"}
           </button>
         </form>
+
+        {/* RESERVATION CARD */}
+        <div className="reservation-preview">
+          {lastReservation ? (
+            <ReservationCard
+              id={lastReservation.id}
+              date={lastReservation.date}
+              time={lastReservation.time}
+              status={lastReservation.status}
+            />
+          ) : (
+            <p className="no-reservation">No reservation yet.</p>
+          )}
+        </div>
       </div>
     </div>
   );
 };
 
-export default NewReservation;
+export default BookTable;

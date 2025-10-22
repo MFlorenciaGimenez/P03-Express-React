@@ -1,9 +1,8 @@
 .navbar {
   width: 100%;
   background-color: #ffffff;
-  background-color: var(--color-background-light);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-  padding: 10px 30px;
+  padding: 0.8rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -11,10 +10,10 @@
 }
 
 .navbar-logo {
-  height: 38px; /* controla el alto del logo */
-  width: auto; /* mantiene proporción */
-  object-fit: contain; /* evita deformaciones */
-  margin-right: 8px; /* pequeño espacio antes del texto */
+  height: 38px;
+  width: auto;
+  object-fit: contain;
+  margin-right: 8px;
   display: block;
 }
 
@@ -35,8 +34,8 @@
   padding: 0;
   margin: 0;
   display: flex;
-  align-items: center;
-  gap: 25px;
+  align-items: baseline;
+  gap: 1.5rem;
 }
 
 .navbar-links li a:not(.btn-primary),
@@ -60,17 +59,11 @@
   padding: 0;
 }
 
-.btn-primary {
-  background-color: #d32f2f;
-  color: #ffffff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-  margin-left: 25px;
-  transition: background-color 0.2s;
-  white-space: nowrap;
+.navbar .btn-primary {
+  padding: 0.45rem 1rem;
+}
+.navbar a {
+  line-height: 1;
 }
 
 .btn-primary:hover {
@@ -93,7 +86,7 @@
     flex-direction: column;
     align-items: flex-start;
     width: 100%;
-    gap: 8px;
+    gap: 5px;
   }
 
   .navbar-links li {

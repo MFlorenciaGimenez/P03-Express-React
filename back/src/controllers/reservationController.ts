@@ -33,12 +33,13 @@ export const getReservationById = async (req: Request, res: Response) => {
 };
 export const createReservation = async (req: Request, res: Response) => {
   try {
-    const { date, time, userId, partySize } = req.body;
+    const { date, time, userId, partySize, specialRequest } = req.body;
     const reservation = await createReservationService({
       date,
       time,
       userId,
       partySize,
+      specialRequest,
     });
     res.status(201).json(reservation);
   } catch (error: any) {

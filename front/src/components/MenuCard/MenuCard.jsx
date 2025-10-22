@@ -4,7 +4,7 @@ const MenuCard = ({ name, description, price, imgUrl }) => {
   return (
     <div className="menu-card">
       <div className="image-wrapper">
-        <img src={imgUrl} alt={name} className="menu-image" />
+        <img src={imgUrl} alt={name} className="menu-card-image" />
       </div>
       <div className="menu-card-content">
         <h3>{name}</h3>

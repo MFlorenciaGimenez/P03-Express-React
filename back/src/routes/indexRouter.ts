@@ -8,7 +8,7 @@ const indexRouter = Router();
 
 indexRouter.use("/users", userRouter);
 
-indexRouter.use("/appointments", reservationRouter);
+indexRouter.use("/reservations", reservationRouter);
 
 indexRouter.use("/menu", menuRouter);
 

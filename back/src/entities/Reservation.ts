@@ -1,12 +1,5 @@
-import {
-  Column,
-  Entity,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-  Table,
-} from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "./User";
-import { table } from "console";
 import { RestaurantTable } from "./Table";
 
 export enum ReservationStatus {
@@ -36,6 +29,9 @@ export class Reservation {
     default: ReservationStatus.ACTIVE,
   })
   status: ReservationStatus;
+
+  @Column({ nullable: true })
+  specialRequest?: string;
 
   @ManyToOne(() => User, (user) => user.reservations)
   user: User;

@@ -2,12 +2,12 @@ import { Routes, Route } from "react-router-dom";
 import Home from "./views/Home/Home";
 import Menu from "./views/Menu/Menu";
 import NavBar from "./components/NavBar/NavBar";
-import MyReservation from "./views/Reservations/myReservations";
 import Register from "./views/register/Register";
 import Login from "./views/Login/Login";
-import NewReservation from "./views/NewReservation/NewRerervation";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import "./app.css";
+import BookTable from "./views/NewReservation/NewRerervation";
+import MyReservations from "./views/Reservations/myReservations";
 
 function App() {
   return (
@@ -22,7 +22,7 @@ function App() {
           path="/reservations"
           element={
             <PrivateRoute>
-              <MyReservation />
+              <MyReservations />
             </PrivateRoute>
           }
         />
@@ -30,7 +30,7 @@ function App() {
           path="/new-reservation"
           element={
             <PrivateRoute>
-              <NewReservation />
+              <BookTable />
             </PrivateRoute>
           }
         />

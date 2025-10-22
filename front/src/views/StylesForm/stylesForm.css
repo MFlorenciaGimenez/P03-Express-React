@@ -62,7 +62,7 @@ body {
 }
 
 .form-input:focus {
-  border-color: #c0392b;
+  border-color: #c94c4c;
   outline: none;
 }
 
@@ -103,7 +103,7 @@ body {
 }
 
 .submit-button:disabled {
-  background-color: #d1b8b8;
+  background-color: #c94c4c;
   cursor: not-allowed;
 }
 
