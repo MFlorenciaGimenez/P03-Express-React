@@ -3,7 +3,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 @Entity({
   name: "menuItems",
 })
-export class MenuItems {
+export class MenuItem {
   @PrimaryGeneratedColumn()
   id: string;
 
@@ -11,7 +11,7 @@ export class MenuItems {
   name: string;
 
   @Column()
-  description: string;
+  description?: string;
 
   @Column()
   price: string;

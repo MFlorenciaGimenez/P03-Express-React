@@ -35,8 +35,8 @@ const Menu = () => {
     "Appetizers",
     "Ramen & Udon",
     "Sushi & Sashimi",
-    "Main Courses",
-    "Dessert",
+    "Main Course",
+    "Desserts",
   ];
 
   const categories = [...new Set(menuItems.map((item) => item.category))];

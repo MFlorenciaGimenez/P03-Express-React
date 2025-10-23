@@ -7,7 +7,6 @@ import Login from "./views/Login/Login";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import "./app.css";
 import BookTable from "./views/NewReservation/NewRerervation";
-import MyReservations from "./views/Reservations/myReservations";
 
 function App() {
   return (
@@ -18,14 +17,6 @@ function App() {
         <Route path="/menu" element={<Menu />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route
-          path="/reservations"
-          element={
-            <PrivateRoute>
-              <MyReservations />
-            </PrivateRoute>
-          }
-        />
         <Route
           path="/new-reservation"
           element={

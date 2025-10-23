@@ -98,6 +98,18 @@ export const createReservationService = async ({
   const chosenTable =
     freeTables.find((t) => t.capacity >= partySize) || freeTables[0];
 
+  const activeReservations = await reservationRepository.count({
+    where: {
+      user: { id: userId },
+      status: ReservationStatus.ACTIVE,
+    },
+  });
+
+  if (activeReservations >= 2) {
+    throw new Error(
+      "User already has the maximum number of active reservations (2)."
+    );
+  }
   const newReservation = reservationRepository.create({
     date,
     time,
@@ -113,17 +125,21 @@ export const createReservationService = async ({
 export const cancelReservationService = async (
   id: number
 ): Promise<Reservation> => {
-  const reservation: Reservation | null = await reservationRepository.findOneBy(
-    {
-      id,
-    }
-  );
+  const reservation: Reservation | null = await reservationRepository.findOne({
+    where: { id },
+    relations: ["table"],
+  });
   if (!reservation) {
     throw new Error("no reservation for selected user");
   }
+  if (reservation.status === ReservationStatus.CANCELLED) return reservation;
   reservation.status = ReservationStatus.CANCELLED;
-  await reservationRepository.save(reservation);
-  return reservation;
+  if (reservation.table) {
+    reservation.table.isAvailable = true;
+    await restaurantTableRepository.save(reservation.table);
+  }
+
+  return await reservationRepository.save(reservation);
 };
 
 export default cancelReservationService;

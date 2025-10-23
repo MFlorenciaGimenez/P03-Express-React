@@ -1,20 +1,22 @@
 import "./Reservation.css";
 
 const ReservationCard = ({ id, date, time, status, onCancel }) => {
+  const s = String(status).toLowerCase();
+  const isActive = s === "active";
+
   return (
-    <div className={`turno-card ${status}`}>
-      <h3>Reservation #{id}</h3>
+    <div className={`reservation-card ${s}`}>
+      <h3 className="reservation-title">Reservation</h3>
       <p>Date: {date}</p>
       <p>Time: {time}</p>
       <p>
-        Status: <strong>{status}</strong>
+        Status: <strong className={`status ${s}`}>{status}</strong>
       </p>
-      {status === "active" && (
+      {isActive ? (
         <button className="cancel-btn" onClick={() => onCancel(id)}>
           Cancel Reservation
         </button>
-      )}
-      {status === "cancelled" && (
+      ) : (
         <p className="cancelled-text">This reservation is cancelled</p>
       )}
     </div>
