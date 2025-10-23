@@ -45,7 +45,7 @@ export const createReservation = async (req: Request, res: Response) => {
   } catch (error: any) {
     console.error("Error creating reservation:", error.message);
     res.status(400).json({
-      message: "cannot create a new reservation",
+      message: error.message,
     });
   }
 };

@@ -81,10 +81,10 @@ const BookTable = () => {
     if (!time) return alert("Please select a valid time within opening hours.");
     if (reservations.length >= 2)
       return alert("You already have 2 active reservations.");
-
+    console.log(date);
     setLoading(true);
     try {
-      const res = await axios.post(`${API_URL}/reservations`, {
+      const res = await axios.post(`${API_URL}/reservations/schedule`, {
         date,
         time,
         userId: storedUser.id,

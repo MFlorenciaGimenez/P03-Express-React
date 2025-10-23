@@ -15,7 +15,6 @@ const Login = () => {
 
   if (user) {
     navigate("/");
-    return null;
   }
 
   const formik = useFormik({
