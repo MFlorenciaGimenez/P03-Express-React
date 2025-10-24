@@ -8,7 +8,7 @@ const server = express();
 server.use(morgan("dev"));
 server.use(
   cors({
-    origin: "https://sakuraproject.vercel.app/",
+    origin: "https://sakuraproject.vercel.app",
 
     credentials: true,
   })
