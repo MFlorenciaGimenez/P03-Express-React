@@ -5,7 +5,7 @@ import NavBar from "./components/NavBar/NavBar";
 import Register from "./views/register/Register";
 import Login from "./views/Login/Login";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
-import "./app.css";
+import "./App.css";
 import BookTable from "./views/NewReservation/NewRerervation";
 
 function App() {
