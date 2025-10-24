@@ -8,14 +8,11 @@ import { RestaurantTable } from "../entities/Table";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
-  host: DB_HOST,
-  port: Number(DB_PORT),
-  username: DB_USER,
-  password: DB_PASSWORD,
-  database: DB_NAME,
+  url: process.env.DATABASE_URL, ,
   synchronize: true,
   dropSchema: false,
   logging: false,
+   ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
   entities: [User, Reservation, Credential, MenuItem, RestaurantTable],
   subscribers: [],
   migrations: [],
